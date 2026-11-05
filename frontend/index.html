@@ -1,0 +1,785 @@
+﻿<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Samvaad — two ways, one conversation</title>
+<meta name="description" content="Two-way communication between deaf and hearing people. Live captions by Gnani Prisma, spoken replies by Gnani Timbre."/>
+<script>try{if(localStorage.getItem("sv-theme")==="light")document.documentElement.classList.remove("dark")}catch(e){}</script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com"></script>
+<script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{
+"surface":"rgb(var(--sv-surface) / <alpha-value>)","background":"rgb(var(--sv-surface) / <alpha-value>)",
+"surface-container-lowest":"rgb(var(--sv-lowest) / <alpha-value>)","surface-container-low":"rgb(var(--sv-low) / <alpha-value>)",
+"surface-container":"rgb(var(--sv-container) / <alpha-value>)","surface-container-high":"rgb(var(--sv-high) / <alpha-value>)",
+"surface-container-highest":"rgb(var(--sv-highest) / <alpha-value>)",
+"on-surface":"rgb(var(--sv-on) / <alpha-value>)","on-surface-variant":"rgb(var(--sv-on-var) / <alpha-value>)",
+"secondary":"rgb(var(--sv-teal) / <alpha-value>)","secondary-fixed":"rgb(var(--sv-teal-2) / <alpha-value>)",
+"tertiary":"rgb(var(--sv-amber) / <alpha-value>)","primary":"rgb(var(--sv-primary) / <alpha-value>)",
+"primary-container":"rgb(var(--sv-orange) / <alpha-value>)","on-primary-container":"rgb(var(--sv-orange-ink) / <alpha-value>)",
+"error":"rgb(var(--sv-err) / <alpha-value>)"},
+"borderRadius":{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},
+"spacing":{"gutter":"1.5rem","space-md":"1rem","space-lg":"1.5rem","space-sm":"0.5rem","space-xl":"2.25rem","space-xs":"0.25rem"},
+"fontFamily":{"sans":["Inter"],"mono":["JetBrains Mono"]},
+"fontSize":{"body-lg":["18px",{"lineHeight":"28px","fontWeight":"400"}],"headline-lg":["36px",{"lineHeight":"40px","letterSpacing":"-0.03em","fontWeight":"800"}],"title":["18px",{"lineHeight":"24px","letterSpacing":"-0.01em","fontWeight":"600"}],"body-md":["15px",{"lineHeight":"24px","fontWeight":"400"}],"label-code-sm":["11px",{"lineHeight":"16px","letterSpacing":"0.02em","fontWeight":"500"}],"body-sm":["13px",{"lineHeight":"20px","fontWeight":"400"}],"display":["48px",{"lineHeight":"52px","letterSpacing":"-0.035em","fontWeight":"800"}],"headline-sm":["20px",{"lineHeight":"26px","letterSpacing":"-0.015em","fontWeight":"700"}],"badge-mono":["10px",{"lineHeight":"14px","letterSpacing":"0.05em","fontWeight":"600"}],"label-code-lg":["13px",{"lineHeight":"18px","letterSpacing":"-0.01em","fontWeight":"500"}],"headline-md":["24px",{"lineHeight":"30px","letterSpacing":"-0.02em","fontWeight":"700"}]}}}}</script>
+<style>
+  /* ============ THEME TOKENS ============ */
+  :root{ /* light */
+    --sv-surface:250 247 241; --sv-lowest:255 255 255; --sv-low:243 238 229;
+    --sv-container:255 255 255; --sv-high:240 233 221; --sv-highest:229 221 206;
+    --sv-on:26 28 34; --sv-on-var:90 82 68;
+    --sv-teal:13 125 115; --sv-teal-2:15 118 110; --sv-amber:161 98 7;
+    --sv-primary:180 83 9; --sv-orange:255 169 77; --sv-orange-ink:74 40 0; --sv-err:179 38 30;
+    --teal:#0d7d73; --amber:#a16207; --amber-soft:#eab308; --orange:#e8750a; --err:#b3261e;
+    --txt:#1a1c22; --txt-dim:#6b6355; --bg0:#ffffff; --bg1:#f3eee5; --bg2:#ffffff; --bg3:#f0e9dd; --bg4:#e5ddce; --line:#ddd3c2;
+    --grid-dot:26 28 34;
+  }
+  .dark{
+    --sv-surface:17 19 25; --sv-lowest:11 14 19; --sv-low:25 28 33;
+    --sv-container:29 32 37; --sv-high:39 42 48; --sv-highest:50 53 58;
+    --sv-on:225 226 233; --sv-on-var:216 195 177;
+    --sv-teal:77 220 198; --sv-teal-2:110 249 226; --sv-amber:253 212 78;
+    --sv-primary:255 207 162; --sv-orange:255 169 77; --sv-orange-ink:112 64 0; --sv-err:255 180 171;
+    --teal:#4ddcc6; --amber:#fdd44e; --amber-soft:#fdd44e; --orange:#ffa94d; --err:#ffb4ab;
+    --txt:#e1e2e9; --txt-dim:#8b93a1; --bg0:#0b0e13; --bg1:#191c21; --bg2:#1d2025; --bg3:#272a30; --bg4:#32353a; --line:#32353a;
+    --grid-dot:225 226 233;
+  }
+  html{scroll-behavior:smooth}
+  body{overscroll-behavior:none}
+  ::-webkit-scrollbar{width:0;height:0}
+  .material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24}
+  :root{--caption-size:1.5rem}
+  ::selection{background:var(--orange);color:#4a2800}
+
+  /* doodles share one visual language */
+  .doodle{stroke:var(--txt);stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round;fill:none}
+  .doodle .teal{stroke:var(--teal)} .doodle .amber{stroke:var(--amber-soft)}
+  .doodle .fteal{fill:var(--teal);stroke:none} .doodle .famber{fill:var(--amber-soft);stroke:none}
+  .doodle .ftxt{fill:var(--txt);stroke:none}
+  .doodle .thin{stroke-width:1.8} .doodle .dash{stroke-dasharray:5 6}
+  .doodle text{font-family:'JetBrains Mono',monospace;stroke:none;fill:var(--txt-dim)}
+
+  /* ---- JS-injected elements ---- */
+  .caption-line{font-size:var(--caption-size);line-height:1.4;font-weight:600;letter-spacing:-0.01em;color:var(--txt)}
+  .msg{border-radius:12px;padding:12px 16px;max-width:94%;background:var(--bg3)}
+  .msg-them{align-self:flex-start;border-left:3px solid var(--teal)}
+  .msg-you{align-self:flex-end;border-right:3px solid var(--amber-soft);text-align:right;background:var(--bg2)}
+  .msg .role{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.06em;text-transform:uppercase;display:block;margin-bottom:4px}
+  .msg-them .role{color:var(--teal)}.msg-you .role{color:var(--amber)}
+  .msg .meta{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--txt-dim);margin-top:5px}
+
+  .status{display:inline-flex;align-items:center;gap:8px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.04em;padding:5px 14px;border-radius:9999px;background:var(--bg1);color:var(--txt-dim);border:1px solid var(--bg3)}
+  .status .dot{width:9px;height:9px;border-radius:2px;background:var(--txt-dim);flex:none}
+  .status[data-state="idle"] .dot{background:var(--txt-dim)}
+  .status[data-state="listening"] .dot{background:var(--teal);border-radius:50%;animation:pulse 1.1s infinite}
+  .status[data-state="transcribing"] .dot{background:var(--orange);border-radius:50%}
+  .status[data-state="speaking"] .dot{background:var(--amber-soft);clip-path:polygon(0 0,100% 50%,0 100%);border-radius:0}
+  .status[data-state="error"] .dot{background:var(--err);clip-path:polygon(50% 0,100% 100%,0 100%);border-radius:0}
+  @keyframes pulse{50%{opacity:.35}}
+
+  .vu-bar{width:4px;border-radius:9999px;background:var(--teal);transform-origin:bottom;transform:scaleY(.15);transition:transform 80ms linear}
+
+  .phrase{text-align:left;padding:9px 12px;border-radius:10px;background:var(--bg1);color:var(--txt);font-family:Inter;font-size:13px;font-weight:500;line-height:1.35;border:1px solid transparent;cursor:pointer;transition:all .15s}
+  .phrase:hover{background:var(--bg4);border-color:var(--amber-soft)}
+  .phrase:focus-visible{outline:2px solid var(--orange);outline-offset:1px}
+  .phrase .en{display:block;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--txt-dim);margin-top:3px;text-transform:uppercase;letter-spacing:.04em}
+
+  .meter{height:6px;border-radius:3px;background:var(--bg3);overflow:hidden}
+  .meter>div{height:100%;width:0%;background:var(--teal);transition:width .1s linear}
+  .meter.hold>div{background:var(--orange)}
+
+  .chain-chip{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:.05em;padding:5px 14px;border-radius:9999px;background:var(--bg3);color:var(--amber);text-transform:uppercase}
+  .chain-arrow{font-size:12px;color:var(--txt-dim)}
+
+  .sign-card{background:var(--bg2);border-radius:12px;padding:10px 12px;transition:background .15s,outline .15s;outline:1px solid var(--line)}
+  .sign-card:hover{background:var(--bg3)}
+  .sign-card.active{background:var(--bg3);outline:2px solid var(--teal)}
+  .sign-card .simg{width:100%;height:52px;object-fit:contain;border-radius:8px;margin-bottom:5px;background:#FAF3E8}
+  .sign-card .head{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}
+  .sign-card .head .material-symbols-outlined{color:var(--amber);font-size:18px}
+  .sign-card .num{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--txt-dim)}
+  .sign-card .nm{font-size:13px;font-weight:600;color:var(--txt);display:block}
+  .sign-card .ph{font-size:12px;color:var(--txt-dim);display:block;margin-top:1px;line-height:1.35}
+
+  select.sv{background:var(--bg1);color:var(--txt);border:1px solid var(--bg3);border-radius:9999px;padding:7px 14px;font-family:Inter;font-size:13px}
+  select.sv:focus-visible{outline:2px solid var(--orange)}
+  button:focus-visible,a:focus-visible,textarea:focus-visible,summary:focus-visible{outline:2px solid var(--orange);outline-offset:1px}
+
+  details.faq{background:rgb(var(--sv-container));border-radius:18px;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+  details.faq summary{cursor:pointer;list-style:none;padding:18px 24px;font-weight:600;font-size:16px;color:var(--txt);display:flex;align-items:center;justify-content:space-between;gap:12px}
+  details.faq summary::-webkit-details-marker{display:none}
+  details.faq summary::after{content:"+";font-family:'JetBrains Mono';color:var(--orange);font-size:20px;flex:none}
+  details.faq[open] summary::after{content:"–"}
+  details.faq .ans{padding:0 24px 18px;color:var(--txt-dim);font-size:15px;line-height:1.6;max-width:720px}
+
+  .toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(140%);background:var(--bg3);color:var(--txt);border:1px solid var(--bg4);border-radius:9999px;padding:11px 22px;font-size:14px;z-index:99;transition:transform .25s;max-width:min(90vw,560px);text-align:center}
+  .toast.show{transform:translateX(-50%) translateY(0)}
+  .toast[data-kind="error"]{border-color:var(--err)}
+
+  #camVideo{transform:scaleX(-1)}
+  .skip-link{position:absolute;left:-9999px;top:8px;z-index:100;background:var(--orange);color:#4a2800;padding:10px 18px;border-radius:9999px}
+  .skip-link:focus{left:8px}
+  .grid-dots{background-image:radial-gradient(rgb(var(--grid-dot)) 1px,transparent 1px);background-size:24px 24px}
+  @media (prefers-reduced-motion:reduce){.animate-pulse,.animate-ping,.animate-bounce{animation:none}}
+</style>
+</head>
+<body class="bg-surface font-sans text-on-surface antialiased">
+<a class="skip-link" href="#live">Skip to live conversation</a>
+
+<!-- ================= HEADER ================= -->
+<header class="fixed top-0 w-full z-50 bg-surface/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.15)]">
+  <div class="h-20 w-full px-gutter flex items-center justify-between max-w-7xl mx-auto">
+    <a class="flex items-center gap-space-sm group focus:outline-none" href="#top">
+      <span class="flex items-center justify-center w-10 h-10 rounded-xl bg-surface-container-high text-secondary"><span class="material-symbols-outlined text-[22px]">graphic_eq</span></span>
+      <div class="flex flex-col">
+        <div class="flex items-center gap-space-xs"><span class="text-headline-sm tracking-tight text-on-surface font-bold">Samvaad</span><span class="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse"></span></div>
+        <span class="font-mono text-label-code-sm text-secondary tracking-widest uppercase">Two-way bridge</span>
+      </div>
+    </a>
+    <nav class="hidden md:flex items-center gap-space-md" aria-label="Main">
+      <a class="text-body-md text-on-surface-variant hover:text-on-surface transition-colors py-space-xs px-space-sm" href="#story">Story</a>
+      <a class="text-body-md text-on-surface-variant hover:text-on-surface transition-colors py-space-xs px-space-sm" href="#live">Live</a>
+      <a class="text-body-md text-on-surface-variant hover:text-on-surface transition-colors py-space-xs px-space-sm" href="#signs">Signs</a>
+      <a class="text-body-md text-on-surface-variant hover:text-on-surface transition-colors py-space-xs px-space-sm" href="#faq">FAQ</a>
+    </nav>
+    <div class="flex items-center gap-space-sm">
+      <div class="hidden sm:flex items-center gap-space-xs px-space-sm py-space-xs rounded-full bg-surface-container-low" id="healthChip">
+        <span class="w-2 h-2 rounded-full bg-tertiary" id="healthDot"></span>
+        <span class="font-mono text-label-code-sm text-on-surface-variant" id="healthText">CHECKING…</span>
+      </div>
+      <button class="flex items-center justify-center w-10 h-10 rounded-full bg-surface-container-high text-on-surface hover:bg-surface-container-highest transition-colors" id="themeBtn" aria-label="Toggle light / dark theme">
+        <span class="material-symbols-outlined text-[20px]" id="themeIcon">light_mode</span>
+      </button>
+      <a class="inline-flex items-center justify-center text-title font-semibold rounded-full bg-primary-container text-on-primary-container px-space-lg py-space-sm hover:brightness-110 active:scale-[0.98] transition-all shadow-[0_0_16px_rgba(255,169,77,0.2)]" href="#live"><span class="material-symbols-outlined sm:mr-space-xs text-[20px]">hearing</span><span class="hidden sm:inline">Start a conversation</span></a>
+    </div>
+  </div>
+</header>
+
+<main class="w-full pt-20 bg-surface" id="top">
+<div class="relative w-full overflow-hidden bg-background">
+  <div class="absolute inset-0 pointer-events-none opacity-[0.04] grid-dots"></div>
+  <div class="absolute -top-32 -left-32 w-96 h-96 rounded-full bg-secondary/10 blur-[120px] pointer-events-none"></div>
+  <div class="absolute -top-24 right-0 w-[420px] h-[420px] rounded-full bg-tertiary/10 blur-[130px] pointer-events-none"></div>
+
+  <!-- ================= 00 / HERO ================= -->
+  <section class="relative w-full px-gutter pt-space-xl pb-20 max-w-7xl mx-auto">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-space-xl items-center">
+      <div class="lg:col-span-7">
+        <div class="inline-flex items-center gap-space-sm px-space-md py-space-xs rounded-full bg-surface-container mb-space-lg shadow-sm">
+          <span class="w-2 h-2 rounded-full bg-primary-container animate-ping"></span>
+          <span class="font-mono text-label-code-sm text-on-surface-variant uppercase tracking-wider">00 / Two-way bridge · runs in the browser</span>
+        </div>
+        <h1 class="text-display md:text-[54px] md:leading-[58px] text-on-surface font-extrabold tracking-tight mb-space-md">
+          Two people. No interpreter. <span class="text-primary">Finally understanding each other.</span>
+        </h1>
+        <p class="text-body-lg text-on-surface-variant max-w-xl mb-space-xl">
+          Their words become large captions. Your taps and signs become a natural voice. One laptop — no hardware, no installs.
+        </p>
+        <div class="flex flex-wrap items-center gap-space-md mb-space-lg">
+          <a class="inline-flex items-center justify-center text-title font-semibold rounded-full bg-primary-container text-on-primary-container px-space-xl py-space-md shadow-lg hover:brightness-110 active:scale-[0.98] transition-all" href="#live">
+            <span class="material-symbols-outlined mr-space-xs">chat_bubble</span>Start a conversation
+          </a>
+          <a class="inline-flex items-center justify-center text-title font-semibold rounded-full bg-surface-container text-on-surface px-space-lg py-space-md hover:bg-surface-container-high active:scale-[0.98] transition-all" href="#story">
+            <span class="material-symbols-outlined mr-space-xs text-secondary">play_circle</span>The story
+          </a>
+        </div>
+        <div class="flex flex-wrap items-center gap-space-sm">
+          <div class="flex items-center gap-space-xs px-space-sm py-1 rounded-full bg-surface-container-low text-on-surface-variant">
+            <span class="material-symbols-outlined text-[14px] text-secondary">memory</span>
+            <span class="font-mono text-label-code-sm">Powered by Gnani Prisma + Timbre</span>
+          </div>
+          <div class="flex items-center gap-space-xs px-space-sm py-1 rounded-full bg-surface-container-low text-on-surface-variant">
+            <span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+            <span class="font-mono text-label-code-sm">10 languages + Hinglish</span>
+          </div>
+          <div class="flex items-center gap-space-xs px-space-sm py-1 rounded-full bg-surface-container-low text-on-surface-variant">
+            <span class="font-mono text-badge-mono text-secondary-fixed">WCAG AA</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- HERO ILLUSTRATION: drop assets/hero.png to replace the doodle fallback -->
+      <div class="lg:col-span-5">
+        <img src="assets/hero.png" alt="Illustration: a hearing person speaks and their words appear as captions; a deaf person signs and the laptop speaks aloud" class="w-full h-auto rounded-[18px]" hidden onload="this.hidden=false;this.nextElementSibling.style.display='none'" onerror="this.remove()">
+        <svg class="doodle w-full h-auto" viewBox="0 0 520 420" role="img" aria-label="Doodle: a hearing person speaks and their words appear as captions; a deaf person signs and the laptop speaks aloud">
+          <!-- top arc: voice -> captions -->
+          <path class="thin dash teal" d="M150 96 C 230 30, 330 30, 400 92"/>
+          <path class="fteal" d="M398 80 l14 10 -17 6 z"/>
+          <!-- bottom arc: sign -> voice -->
+          <path class="thin dash amber" d="M400 330 C 320 396, 210 396, 128 336"/>
+          <path class="famber" d="M132 348 l-14 -9 16 -8 z"/>
+
+          <!-- RAVI (teal cap, speaking) -->
+          <g>
+            <path d="M78 150 c-4 -26 14 -44 38 -43 c22 1 36 19 33 42 c-2 20 -17 32 -36 31 c-18 -1 -32 -13 -35 -30 z"/>
+            <path class="teal" style="fill:var(--teal);fill-opacity:.18" d="M70 136 c6 -28 54 -36 76 -12 l6 8 c-28 -12 -56 -10 -82 4 z"/>
+            <path class="teal" d="M70 136 c6 -28 54 -36 76 -12"/>
+            <circle class="ftxt" cx="100" cy="148" r="2.6"/><circle class="ftxt" cx="124" cy="147" r="2.6"/>
+            <path d="M106 162 q7 7 16 2"/>
+            <ellipse class="ftxt" cx="113" cy="164" rx="4.5" ry="5.5" opacity=".85"/>
+            <path d="M112 182 c-16 10 -24 28 -26 52 l-4 46"/>
+            <path d="M118 182 c16 8 24 26 26 50 l4 48"/>
+            <path d="M96 214 c-14 2 -24 -6 -30 -16"/>
+            <path d="M134 212 c14 0 22 -10 26 -22"/>
+            <!-- speech arcs -->
+            <path class="teal thin" d="M158 150 q8 8 0 18"/>
+            <path class="teal thin" d="M170 142 q13 14 0 32"/>
+            <path class="teal thin" d="M182 134 q19 20 0 46"/>
+          </g>
+
+          <!-- CAPTION CARD (what Asha reads) -->
+          <g>
+            <path d="M212 56 h150 c6 0 9 4 9 10 v46 c0 7 -4 10 -10 10 h-148 c-7 0 -10 -4 -10 -11 v-45 c0 -6 4 -10 9 -10 z"/>
+            <text x="226" y="86" font-size="16" style="fill:var(--txt);font-weight:600">नमस्ते! theek ho?</text>
+            <path class="teal thin" d="M226 102 h86"/><path class="teal thin" d="M318 102 h28"/>
+            <circle class="fteal" cx="216" cy="46" r="3"/><path class="teal thin" d="M232 40 l6 10"/>
+          </g>
+
+          <!-- ASHA (amber bob, signing) -->
+          <g>
+            <path d="M398 150 c-4 -26 14 -44 38 -43 c22 1 36 19 33 42 c-2 20 -17 32 -36 31 c-18 -1 -32 -13 -35 -30 z"/>
+            <path class="amber" style="fill:var(--amber-soft);fill-opacity:.2" d="M390 148 c-8 -34 24 -52 48 -46 c22 5 32 24 28 46 c-2 -16 -10 -26 -20 -30 c2 10 0 16 -4 22 c-4 -10 -12 -16 -22 -18 c-12 -2 -24 8 -30 26 z"/>
+            <path class="amber" d="M390 148 c-8 -34 24 -52 48 -46 c22 5 32 24 28 46"/>
+            <circle class="ftxt" cx="420" cy="150" r="2.6"/><circle class="ftxt" cx="444" cy="149" r="2.6"/>
+            <path d="M426 164 q7 6 15 1"/>
+            <circle class="amber thin" cx="400" cy="162" r="3.4"/>
+            <path d="M432 182 c-16 10 -24 28 -26 52 l-4 44"/>
+            <path d="M438 182 c16 8 24 26 26 50 l4 46"/>
+            <!-- signing hand up (ILY-ish) -->
+            <path d="M414 214 c-12 -4 -20 -14 -22 -28 l-2 -14"/>
+            <path d="M388 170 l-3 -16 m3 16 l-8 -12 m8 12 l2 -17"/>
+            <path class="amber thin dash" d="M372 142 q-8 -8 -4 -18 m16 12 q-4 -10 2 -18"/>
+            <path d="M458 212 c12 2 20 -6 24 -16"/>
+          </g>
+
+          <!-- LAPTOP speaking -->
+          <g>
+            <path d="M196 330 l118 0 l10 34 l-138 0 z"/>
+            <path d="M206 330 l0 -42 c0 -5 3 -8 8 -8 l88 0 c6 0 9 3 9 8 l0 42"/>
+            <path class="amber thin" d="M224 300 q6 8 16 4 m10 2 q10 2 14 -6"/>
+            <path class="teal thin" d="M226 314 h60"/>
+            <!-- sound out -->
+            <path class="amber thin" d="M330 296 q8 8 0 18"/>
+            <path class="amber thin" d="M342 288 q13 14 0 32"/>
+            <path class="amber thin" d="M354 280 q19 20 0 46"/>
+            <text x="332" y="266" font-size="15" style="fill:var(--txt)">♪</text>
+          </g>
+
+          <!-- sparkles -->
+          <path class="thin" d="M66 70 l0 14 m-7 -7 l14 0"/>
+          <path class="thin" d="M470 236 l0 12 m-6 -6 l12 0"/>
+          <circle class="famber" cx="178" cy="250" r="2.6"/>
+          <circle class="fteal" cx="352" cy="180" r="2.6"/>
+          <text x="140" y="402" font-size="12">awaaz → captions</text>
+          <text x="330" y="402" font-size="12">sign → awaaz</text>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 01 / THE PROBLEM ================= -->
+  <section class="relative w-full px-gutter py-space-xl max-w-7xl mx-auto scroll-mt-28" id="story">
+    <div class="mb-space-lg">
+      <span class="font-mono text-label-code-sm text-secondary uppercase tracking-widest">01 / The problem</span>
+      <h2 class="text-headline-lg text-on-surface mt-space-xs font-extrabold">The five-minute counter barrier.</h2>
+    </div>
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-stretch">
+      <!-- STORY DOODLE: pharmacy scene -->
+      <div class="lg:col-span-6 bg-surface-container rounded-[18px] p-space-lg shadow-md flex flex-col">
+        <div class="flex items-center justify-between mb-space-sm">
+          <span class="font-mono text-badge-mono px-space-sm py-1 rounded-full bg-surface-container-highest text-tertiary uppercase">A scene we built this for</span>
+          <span class="font-mono text-label-code-sm text-on-surface-variant">Pharmacy, 18:42</span>
+        </div>
+        <img src="assets/story.png" alt="Illustration: a rushed pharmacist speaks fast behind a counter while Ananya, who is deaf, cannot follow — a laptop with captions bridges them" class="w-full h-auto rounded-xl my-auto" hidden onload="this.hidden=false;this.nextElementSibling.style.display='none'" onerror="this.remove()">
+        <svg class="doodle w-full h-auto my-auto" viewBox="0 0 460 280" role="img" aria-label="Doodle: a rushed pharmacist speaks fast behind a counter while Ananya, who is deaf, cannot follow — a laptop with captions bridges them">
+          <!-- noisy fan -->
+          <path class="thin" d="M208 28 q10 -12 20 0 q10 12 20 0"/>
+          <text x="258" y="34" font-size="11">fan + 3 customers…</text>
+          <!-- counter -->
+          <path d="M40 196 h380 m-370 0 v54 m360 -54 v54"/>
+          <path class="thin" d="M70 216 h60"/><path class="thin" d="M86 232 h30"/>
+          <!-- PHARMACIST (Ravi w/ cross) -->
+          <g>
+            <path d="M96 96 c-4 -24 13 -40 34 -39 c20 1 33 17 30 38 c-2 18 -15 29 -32 28 c-17 -1 -29 -12 -32 -27 z"/>
+            <path class="teal" style="fill:var(--teal);fill-opacity:.18" d="M89 84 c6 -25 48 -32 68 -10 l5 7 c-25 -11 -50 -9 -73 3 z"/>
+            <path class="teal" d="M89 84 c6 -25 48 -32 68 -10"/>
+            <circle class="ftxt" cx="116" cy="94" r="2.4"/><circle class="ftxt" cx="138" cy="93" r="2.4"/>
+            <ellipse class="ftxt" cx="127" cy="108" rx="4" ry="5"/>
+            <path d="M126 124 c-12 8 -18 22 -20 40 l-2 32"/>
+            <path d="M132 124 c12 7 18 21 20 38 l2 34"/>
+            <path class="thin" d="M120 150 l7 0 m-3.5 -3.5 l0 7"/>
+            <!-- fast speech -->
+            <path class="teal thin" d="M166 96 q7 7 0 15"/>
+            <path class="teal thin" d="M176 90 q11 12 0 27"/>
+            <text x="186" y="88" font-size="12" style="fill:var(--teal)">aadha… BP… jaldi!</text>
+          </g>
+          <!-- ANANYA (Asha, confused -> reading captions) -->
+          <g>
+            <path d="M330 100 c-4 -24 13 -40 34 -39 c20 1 33 17 30 38 c-2 18 -15 29 -32 28 c-17 -1 -29 -12 -32 -27 z"/>
+            <path class="amber" style="fill:var(--amber-soft);fill-opacity:.2" d="M323 98 c-7 -30 21 -46 43 -41 c20 4 29 21 25 41 c-2 -14 -9 -23 -18 -27 c2 9 0 14 -4 20 c-4 -9 -11 -14 -20 -16 c-11 -2 -21 7 -26 23 z"/>
+            <path class="amber" d="M323 98 c-7 -30 21 -46 43 -41 c20 4 29 21 25 41"/>
+            <circle class="ftxt" cx="350" cy="98" r="2.4"/><circle class="ftxt" cx="372" cy="97" r="2.4"/>
+            <path d="M354 112 q7 5 14 1"/>
+            <path d="M358 128 c-12 8 -18 22 -20 40 l-2 30"/>
+            <path d="M364 128 c12 7 18 21 20 38 l2 32"/>
+            <text x="394" y="76" font-size="18" style="fill:var(--txt)">?</text>
+            <path class="thin dash" d="M346 70 q4 -10 14 -10"/>
+          </g>
+          <!-- laptop with captions on the counter -->
+          <g>
+            <path d="M206 196 l84 0 l8 24 l-100 0 z"/>
+            <path d="M214 196 l0 -34 c0 -4 3 -7 7 -7 l62 0 c5 0 8 3 8 7 l0 34"/>
+            <path class="teal thin" d="M224 172 h52"/><path class="teal thin" d="M224 182 h38"/>
+            <path class="amber thin" d="M268 182 h14"/>
+            <!-- eyes to captions -->
+            <path class="thin dash amber" d="M340 120 C 320 150, 300 164 282 170"/>
+          </g>
+          <text x="40" y="270" font-size="12">lipreading breaks when he turns — captions don't.</text>
+        </svg>
+        <div class="flex items-center justify-between mt-space-sm">
+          <span class="font-mono text-label-code-sm text-on-surface flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-secondary inline-block"></span>Fixed with one shared browser tab</span>
+          <span class="font-mono text-badge-mono text-primary uppercase">Zero signups</span>
+        </div>
+      </div>
+      <!-- Short prose + illustrative HUD -->
+      <div class="lg:col-span-6 flex flex-col gap-space-lg">
+        <div class="bg-surface-container rounded-[18px] p-space-lg shadow-md">
+          <h3 class="text-headline-sm text-on-surface font-bold mb-space-sm">Ananya is buying medication for her grandmother.</h3>
+          <p class="text-body-md text-on-surface-variant leading-relaxed">The pharmacist is rushed, the shop is loud, and Ananya is deaf. He rattles off the dosage while turning to the shelf — the lipreading chain shatters. For medicine, a guess is not good enough. Notes apps are slow, awkward, and everyone in the queue is watching.</p>
+        </div>
+        <div class="bg-surface-container-lowest rounded-[18px] p-space-lg shadow-xl flex-1 flex flex-col">
+          <div class="flex items-center justify-between pb-space-sm">
+            <span class="font-mono text-badge-mono text-error uppercase flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-error animate-pulse"></span>Illustrative scene</span>
+            <span class="font-mono text-label-code-sm text-on-surface-variant">Live numbers below ↓</span>
+          </div>
+          <div class="flex flex-col gap-space-sm my-auto">
+            <div class="bg-surface-container-high rounded-xl p-space-md">
+              <span class="font-mono text-badge-mono text-secondary uppercase">Pharmacist (voice)</span>
+              <p class="text-body-md text-on-surface mt-1">"आधा tablet खाने से पहले। Dizziness आये toh band kar dena।"</p>
+              <span class="font-mono text-label-code-sm text-secondary mt-1 inline-block">✓ Captioned by Prisma · codemix</span>
+            </div>
+            <div class="bg-surface-container-high rounded-xl p-space-md">
+              <span class="font-mono text-badge-mono text-tertiary uppercase">Ananya (spoken aloud)</span>
+              <p class="text-body-md text-on-surface mt-1">"Samajh gayi. Subah leni hai ya raat ko?"</p>
+              <span class="font-mono text-label-code-sm text-tertiary mt-1 inline-block">🔊 Spoken by Timbre</span>
+            </div>
+          </div>
+          <div class="pt-space-md flex items-center justify-around text-center">
+            <div><span class="block text-headline-sm text-secondary font-bold">~0.3s</span><span class="font-mono text-label-code-sm text-on-surface-variant">captions*</span></div>
+            <div><span class="block text-headline-sm text-tertiary font-bold">10+</span><span class="font-mono text-label-code-sm text-on-surface-variant">languages</span></div>
+            <div><span class="block text-headline-sm text-on-surface font-bold">1</span><span class="font-mono text-label-code-sm text-on-surface-variant">shared screen</span></div>
+          </div>
+          <p class="font-mono text-label-code-sm text-on-surface-variant mt-space-xs">*processing_time from our live API tests</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 02 / HOW A CONVERSATION FLOWS ================= -->
+  <section class="relative w-full px-gutter py-space-xl max-w-7xl mx-auto">
+    <div class="mb-space-xl">
+      <span class="font-mono text-label-code-sm text-tertiary uppercase tracking-widest">02 / How a conversation flows</span>
+      <h2 class="text-headline-lg text-on-surface mt-space-xs font-extrabold">Four beats of mutual clarity.</h2>
+    </div>
+    <div class="relative grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-space-lg">
+      <!-- STEP 1 -->
+      <div class="bg-surface-container rounded-[18px] p-space-lg flex flex-col shadow-md hover:bg-surface-container-high transition-all">
+        <div class="flex items-center justify-between mb-space-sm">
+          <span class="font-mono text-label-code-lg text-secondary px-space-sm py-0.5 rounded-full bg-surface-container-lowest">STEP 01</span>
+        </div>
+        <img src="assets/step1.png" alt="Illustration: person speaking into a microphone" class="w-full h-28 object-contain rounded-lg" hidden onload="this.hidden=false;this.nextElementSibling.style.display='none'" onerror="this.remove()">
+        <svg class="doodle w-full h-28" viewBox="0 0 140 100" role="img" aria-label="Doodle: person speaking into a microphone">
+          <path d="M34 50 c-3 -18 10 -31 26 -30 c15 1 25 13 23 29 c-2 14 -12 22 -25 21 c-13 -1 -22 -9 -24 -20 z"/>
+          <path class="teal" style="fill:var(--teal);fill-opacity:.18" d="M29 41 c5 -19 37 -25 53 -8 l4 5 c-20 -8 -39 -7 -57 3 z"/>
+          <path class="teal" d="M29 41 c5 -19 37 -25 53 -8"/>
+          <circle class="ftxt" cx="50" cy="49" r="2"/><circle class="ftxt" cx="67" cy="48" r="2"/>
+          <ellipse class="ftxt" cx="58" cy="60" rx="3.4" ry="4.2"/>
+          <path class="teal thin" d="M90 46 q6 6 0 13 m9 -19 q10 11 0 25"/>
+          <path d="M116 42 c8 0 12 6 12 13 c0 8 -5 13 -12 13 c-8 0 -13 -5 -13 -13 c0 -7 5 -13 13 -13 z m0 26 v14 m-9 0 h18"/>
+        </svg>
+        <h3 class="text-title text-on-surface my-space-xs font-semibold">They speak naturally</h3>
+        <p class="text-body-sm text-on-surface-variant">No slowing down. Only speech leaves the laptop — silence is gated out.</p>
+        <div class="mt-auto pt-space-sm"><span class="font-mono text-badge-mono text-on-surface-variant">16 kHz PCM · SPEECH-GATED</span></div>
+      </div>
+      <!-- STEP 2 -->
+      <div class="bg-surface-container rounded-[18px] p-space-lg flex flex-col shadow-md hover:bg-surface-container-high transition-all">
+        <div class="flex items-center justify-between mb-space-sm">
+          <span class="font-mono text-label-code-lg text-secondary px-space-sm py-0.5 rounded-full bg-surface-container-lowest">STEP 02</span>
+        </div>
+        <img src="assets/step2.png" alt="Illustration: person reading large captions on a card" class="w-full h-28 object-contain rounded-lg" hidden onload="this.hidden=false;this.nextElementSibling.style.display='none'" onerror="this.remove()">
+        <svg class="doodle w-full h-28" viewBox="0 0 140 100" role="img" aria-label="Doodle: person reading large captions on a card">
+          <path d="M18 24 h74 c5 0 8 3 8 8 v30 c0 6 -3 9 -9 9 h-72 c-6 0 -9 -3 -9 -9 v-30 c0 -5 3 -8 8 -8 z"/>
+          <text x="28" y="50" font-size="19" style="fill:var(--txt);font-weight:700">नमस्ते!</text>
+          <path class="teal thin" d="M28 60 h40"/><path class="amber thin" d="M72 60 h18"/>
+          <path d="M112 62 c-3 -14 8 -24 20 -23 c2 0 4 1 6 2 l2 20 c-1 10 -9 16 -16 15 c-7 -1 -11 -7 -12 -14 z" transform="translate(-6 8)"/>
+          <path class="amber" style="fill:var(--amber-soft);fill-opacity:.2" d="M103 64 c-4 -18 13 -28 26 -24 l6 4 c-12 -4 -24 2 -28 16 z" transform="translate(-4 6)"/>
+          <circle class="ftxt" cx="114" cy="78" r="1.8"/><circle class="ftxt" cx="126" cy="77" r="1.8"/>
+          <path class="thin dash teal" d="M96 42 q8 14 16 22"/>
+        </svg>
+        <h3 class="text-title text-on-surface my-space-xs font-semibold">You read big captions</h3>
+        <p class="text-body-sm text-on-surface-variant">Hinglish the way you read it — resizable, high-contrast, instant.</p>
+        <div class="mt-auto pt-space-sm"><span class="font-mono text-badge-mono text-on-surface-variant">PRISMA v3.0 · INDIC-AUTO · CODEMIX</span></div>
+      </div>
+      <!-- STEP 3 -->
+      <div class="bg-surface-container rounded-[18px] p-space-lg flex flex-col shadow-md hover:bg-surface-container-high transition-all">
+        <div class="flex items-center justify-between mb-space-sm">
+          <span class="font-mono text-label-code-lg text-tertiary px-space-sm py-0.5 rounded-full bg-surface-container-lowest">STEP 03</span>
+        </div>
+        <img src="assets/step3.png" alt="Illustration: a hand tapping quick phrases and a hand signing" class="w-full h-28 object-contain rounded-lg" hidden onload="this.hidden=false;this.nextElementSibling.style.display='none'" onerror="this.remove()">
+        <svg class="doodle w-full h-28" viewBox="0 0 140 100" role="img" aria-label="Doodle: a hand tapping quick phrases and a hand signing">
+          <path d="M16 30 h44 c4 0 6 2 6 6 v12 c0 4 -2 6 -6 6 h-44 c-4 0 -6 -2 -6 -6 v-12 c0 -4 2 -6 6 -6 z"/>
+          <path d="M16 62 h44 c4 0 6 2 6 6 v12 c0 4 -2 6 -6 6 h-44 c-4 0 -6 -2 -6 -6 v-12 c0 -4 2 -6 6 -6 z"/>
+          <path class="teal thin" d="M18 42 h28 m-28 32 h20"/>
+          <!-- tapping finger -->
+          <path class="amber" d="M74 52 c6 -2 10 0 12 6 l4 10 c2 6 -1 10 -6 11"/>
+          <path class="amber thin dash" d="M66 44 q2 -6 8 -8"/>
+          <!-- signing hand -->
+          <path d="M106 74 c-6 -4 -9 -12 -9 -20 l1 -12 m8 32 c8 2 14 -2 16 -8"/>
+          <path d="M98 42 l-2 -12 m2 12 l-6 -9 m6 9 l2 -13 m4 13 l4 -10"/>
+          <path class="amber thin dash" d="M86 24 q-6 -6 -3 -13 m14 9 q-3 -8 2 -14"/>
+        </svg>
+        <h3 class="text-title text-on-surface my-space-xs font-semibold">You tap, type, or sign</h3>
+        <p class="text-body-sm text-on-surface-variant">Quick phrases, free text, or hold a hand sign to the camera.</p>
+        <div class="mt-auto pt-space-sm"><span class="font-mono text-badge-mono text-on-surface-variant">TAP / TYPE / SIGN</span></div>
+      </div>
+      <!-- STEP 4 -->
+      <div class="bg-surface-container rounded-[18px] p-space-lg flex flex-col shadow-md hover:bg-surface-container-high transition-all">
+        <div class="flex items-center justify-between mb-space-sm">
+          <span class="font-mono text-label-code-lg text-tertiary px-space-sm py-0.5 rounded-full bg-surface-container-lowest">STEP 04</span>
+        </div>
+        <img src="assets/step4.png" alt="Illustration: laptop speaking aloud with sound waves" class="w-full h-28 object-contain rounded-lg" hidden onload="this.hidden=false;this.nextElementSibling.style.display='none'" onerror="this.remove()">
+        <svg class="doodle w-full h-28" viewBox="0 0 140 100" role="img" aria-label="Doodle: laptop speaking aloud with sound waves">
+          <path d="M28 66 l64 0 l7 18 l-78 0 z"/>
+          <path d="M34 66 l0 -26 c0 -4 3 -6 6 -6 l48 0 c4 0 6 2 6 6 l0 26"/>
+          <path class="amber thin" d="M44 46 q5 6 12 3 m8 2 q8 1 11 -5"/>
+          <path class="amber thin" d="M104 44 q7 7 0 16 m11 -24 q12 13 0 32 m12 -40 q17 18 0 48"/>
+          <text x="104" y="22" font-size="14" style="fill:var(--txt)">♪</text>
+          <path class="thin" d="M20 24 l0 10 m-5 -5 l10 0"/>
+        </svg>
+        <h3 class="text-title text-on-surface my-space-xs font-semibold">Samvaad speaks it aloud</h3>
+        <p class="text-body-sm text-on-surface-variant">A warm neural voice — and your words always stay on screen as text.</p>
+        <div class="mt-auto pt-space-sm"><span class="font-mono text-badge-mono text-on-surface-variant">TIMBRE TTS · VOICE: POORVI</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 03 / LIVE CONVERSATION ================= -->
+  <section class="relative w-full px-gutter py-space-xl max-w-7xl mx-auto scroll-mt-28" id="live">
+    <div class="mb-space-lg flex flex-col md:flex-row md:items-end justify-between gap-space-md">
+      <div>
+        <span class="font-mono text-label-code-sm text-primary uppercase tracking-widest">03 / Live conversation</span>
+        <h2 class="text-headline-lg text-on-surface mt-space-xs font-extrabold">The bridge in action.</h2>
+        <p class="text-body-md text-on-surface-variant mt-1">One thread, two directions.</p>
+      </div>
+      <div class="flex items-center gap-space-sm bg-surface-container-high px-space-md py-space-xs rounded-full">
+        <span class="w-2.5 h-2.5 rounded-full bg-secondary" id="sessionDot"></span>
+        <span class="font-mono text-label-code-sm text-on-surface" id="sessionChip">SESSION IDLE</span>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-space-lg items-stretch">
+      <!-- LEFT: LISTEN (teal) -->
+      <div class="bg-surface-container rounded-[18px] p-space-lg flex flex-col shadow-xl relative overflow-hidden" aria-labelledby="listenTitle">
+        <div class="absolute top-0 left-0 right-0 h-1 bg-secondary"></div>
+        <div class="flex items-center justify-between flex-wrap gap-space-sm pb-space-md">
+          <div class="flex items-center gap-space-sm">
+            <span class="font-mono text-badge-mono px-space-sm py-1 rounded-full bg-surface-container-lowest text-secondary uppercase" id="listenTitle">Ears / Inbound</span>
+            <span class="status" id="sunoStatus" data-state="idle" role="status"><span class="dot" aria-hidden="true"></span><span class="status-text">Idle</span></span>
+          </div>
+          <div class="flex items-center gap-1 bg-surface-container-low px-space-xs py-0.5 rounded-full">
+            <span class="font-mono text-label-code-sm text-on-surface-variant px-1">Size:</span>
+            <button class="px-space-xs py-0.5 rounded text-on-surface-variant hover:text-on-surface text-xs font-bold" id="sizeDown" aria-label="Smaller captions">A-</button>
+            <button class="px-space-xs py-0.5 rounded text-on-surface hover:text-secondary text-xs font-bold" id="sizeUp" aria-label="Larger captions">A+</button>
+          </div>
+        </div>
+
+        <div class="flex items-center flex-wrap gap-space-sm mb-space-md">
+          <button class="inline-flex items-center gap-space-xs px-space-lg py-space-sm rounded-full bg-primary-container text-on-primary-container font-semibold text-body-md hover:brightness-110 active:scale-[0.98] transition-all shadow-md" id="micBtn">
+            <span class="material-symbols-outlined text-lg">mic</span>Start listening
+          </button>
+          <select class="sv" id="langSel" aria-label="Spoken language">
+            <option value="indic-auto" selected>Auto-detect</option>
+            <option value="hi-IN,en-IN">Hindi + English</option>
+            <option value="hi-IN">Hindi</option>
+            <option value="en-IN">English (IN)</option>
+            <option value="bn-IN">Bangla</option>
+            <option value="gu-IN">Gujarati</option>
+            <option value="kn-IN">Kannada</option>
+            <option value="ml-IN">Malayalam</option>
+            <option value="mr-IN">Marathi</option>
+            <option value="pa-IN">Punjabi</option>
+            <option value="ta-IN">Tamil</option>
+            <option value="te-IN">Telugu</option>
+          </select>
+          <select class="sv" id="modeSel" aria-label="Transcription mode">
+            <option value="realtime" selected>Realtime</option>
+            <option value="rest">Chunked</option>
+          </select>
+        </div>
+
+        <div class="bg-surface-container-low rounded-xl p-space-sm flex items-center justify-between gap-space-md mb-space-md">
+          <div class="flex items-center gap-space-xs">
+            <span class="material-symbols-outlined text-secondary text-lg">graphic_eq</span>
+            <span class="font-mono text-label-code-sm text-on-surface">Prisma STT · speech-gated stream</span>
+          </div>
+          <div class="flex items-end gap-1 h-5 w-28 px-1" id="vuBars" aria-hidden="true">
+            <span class="vu-bar h-5"></span><span class="vu-bar h-5"></span><span class="vu-bar h-5"></span>
+            <span class="vu-bar h-5"></span><span class="vu-bar h-5"></span><span class="vu-bar h-5"></span><span class="vu-bar h-5"></span>
+          </div>
+        </div>
+
+        <div class="bg-surface-container-lowest rounded-xl p-space-md min-h-[280px] max-h-[420px] overflow-y-auto flex flex-col gap-space-sm" id="captions" aria-live="polite" aria-label="Conversation thread">
+          <div class="m-auto text-center text-on-surface-variant text-body-md" id="threadEmpty">
+            Press <strong class="text-on-surface">Start listening</strong> and talk.<br>
+            Both directions land here, in one thread.
+          </div>
+        </div>
+
+        <div class="pt-space-md mt-auto flex items-center justify-between">
+          <button class="px-space-md py-space-xs rounded-full bg-surface-container-high text-on-surface text-body-sm font-semibold hover:bg-surface-container-highest transition-colors" id="exportBtn">Export thread</button>
+          <button class="text-on-surface-variant hover:text-error text-body-sm font-semibold transition-colors" id="clearThreadBtn">Clear</button>
+        </div>
+      </div>
+
+      <!-- RIGHT: SPEAK (amber) -->
+      <div class="bg-surface-container rounded-[18px] p-space-lg flex flex-col shadow-xl relative overflow-hidden" aria-labelledby="speakTitle">
+        <div class="absolute top-0 left-0 right-0 h-1 bg-tertiary"></div>
+        <div class="flex items-center justify-between flex-wrap gap-space-sm pb-space-md">
+          <div class="flex items-center gap-space-sm">
+            <span class="font-mono text-badge-mono px-space-sm py-1 rounded-full bg-surface-container-lowest text-tertiary uppercase" id="speakTitle">Voice / Outbound</span>
+            <span class="status" id="boloStatus" data-state="idle" role="status"><span class="dot" aria-hidden="true"></span><span class="status-text">Idle</span></span>
+          </div>
+          <select class="sv" id="voiceSel" aria-label="Voice">
+            <option value="Poorvi" selected>Poorvi · Hinglish</option>
+            <option value="Deepak">Deepak · Hindi</option>
+            <option value="Kaveri">Kaveri · English (IN)</option>
+            <option value="Shivani">Shivani · v3.0 warm</option>
+            <option value="Avinash">Avinash · v3.0 male</option>
+          </select>
+        </div>
+
+        <div class="mb-space-md">
+          <span class="font-mono text-label-code-sm text-on-surface-variant mb-space-xs block uppercase">Quick replies (tap to speak):</span>
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-2" id="phrases" aria-label="Quick phrases"></div>
+        </div>
+
+        <div class="relative bg-surface-container-lowest rounded-xl p-space-sm mb-space-md">
+          <textarea class="w-full bg-transparent text-on-surface text-body-md placeholder:text-on-surface-variant focus:outline-none resize-none p-1" id="sayInput" placeholder="Type anything — Hinglish works. Samvaad says it aloud…" rows="3" maxlength="300" aria-label="Type a reply to speak aloud"></textarea>
+          <div class="flex items-center justify-between pt-1">
+            <span class="font-mono text-label-code-sm text-on-surface-variant" id="charCount">0 / 300</span>
+            <span class="font-mono text-label-code-sm text-tertiary">Enter to speak</span>
+          </div>
+        </div>
+
+        <div class="bg-surface-container-low rounded-xl p-space-md flex items-start gap-space-sm" aria-live="polite">
+          <span class="material-symbols-outlined text-tertiary text-xl mt-0.5">volume_up</span>
+          <div class="flex flex-col min-w-0">
+            <span class="font-mono text-label-code-sm text-tertiary uppercase">Spoken message · text always shown (TTS is beta)</span>
+            <p class="text-body-md text-on-surface mt-0.5 break-words" id="spokenText">Nothing spoken yet — tap a phrase or type above.</p>
+            <span class="font-mono text-label-code-sm text-on-surface-variant mt-1" id="spokenMeta"></span>
+          </div>
+        </div>
+
+        <div class="pt-space-md mt-auto flex items-center justify-between">
+          <button class="inline-flex items-center gap-space-xs px-space-xl py-space-sm rounded-full bg-primary-container text-on-primary-container font-semibold text-title hover:brightness-110 active:scale-[0.98] transition-all shadow-md" id="sayBtn">
+            <span class="material-symbols-outlined text-lg">campaign</span>Speak aloud
+          </button>
+          <button class="text-on-surface-variant hover:text-on-surface text-body-sm font-semibold transition-colors" id="clearInputBtn">Clear input</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- STAT TILES (live values) -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-space-md mt-space-lg" role="group" aria-label="Live statistics">
+      <div class="bg-surface-container rounded-xl p-space-md shadow-sm flex flex-col justify-between">
+        <span class="font-mono text-label-code-sm text-secondary">GNANI STT LATENCY</span>
+        <div class="my-space-xs"><span class="text-headline-lg font-mono font-extrabold text-on-surface" id="statLatency">–</span><span class="text-headline-sm text-secondary font-bold"> s</span></div>
+        <span class="text-body-sm text-on-surface-variant">processing_time, per segment</span>
+      </div>
+      <div class="bg-surface-container rounded-xl p-space-md shadow-sm flex flex-col justify-between">
+        <span class="font-mono text-label-code-sm text-on-surface-variant">LANGUAGE DETECTED</span>
+        <div class="my-space-xs"><span class="text-headline-lg font-mono font-extrabold text-on-surface" id="statLang">–</span></div>
+        <span class="text-body-sm text-on-surface-variant">indic-auto, live</span>
+      </div>
+      <div class="bg-surface-container rounded-xl p-space-md shadow-sm flex flex-col justify-between">
+        <span class="font-mono text-label-code-sm text-tertiary">TIMBRE TTS LATENCY</span>
+        <div class="my-space-xs"><span class="text-headline-lg font-mono font-extrabold text-on-surface" id="statTts">–</span><span class="text-headline-sm text-tertiary font-bold"> s</span></div>
+        <span class="text-body-sm text-on-surface-variant">full clip, cached repeats free</span>
+      </div>
+      <div class="bg-surface-container rounded-xl p-space-md shadow-sm flex flex-col justify-between">
+        <span class="font-mono text-label-code-sm text-secondary-fixed">API REQUESTS MADE</span>
+        <div class="my-space-xs"><span class="text-headline-lg font-mono font-extrabold text-on-surface" id="statReqs">0</span></div>
+        <span class="text-body-sm text-on-surface-variant">this session, all endpoints</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 04 / SIGN STUDIO ================= -->
+  <section class="relative w-full px-gutter py-space-xl max-w-7xl mx-auto scroll-mt-28" id="signs">
+    <div class="mb-space-lg flex flex-col md:flex-row md:items-end justify-between gap-space-md">
+      <div>
+        <div class="flex items-center gap-space-sm mb-space-xs">
+          <span class="font-mono text-label-code-sm text-tertiary uppercase tracking-widest">04 / Sign studio</span>
+          <span class="font-mono text-badge-mono px-space-sm py-0.5 rounded-full bg-surface-container-high text-tertiary uppercase">Limited vocabulary · 16 signs · beta</span>
+        </div>
+        <h2 class="text-headline-lg text-on-surface font-extrabold">Hands into voice.</h2>
+        <p class="text-body-md text-on-surface-variant mt-1">Hold a sign to the camera — 21 tracked points become a spoken phrase. Not full sign language, and we say so.</p>
+      </div>
+      <div class="flex items-center gap-space-xs px-space-md py-space-xs rounded-full bg-surface-container">
+        <span class="material-symbols-outlined text-secondary text-sm">visibility</span>
+        <span class="font-mono text-label-code-sm text-on-surface-variant">21-node mesh · on-device</span>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-start">
+      <!-- LEFT: camera + chain -->
+      <div class="lg:col-span-7 flex flex-col gap-space-md">
+        <div class="bg-surface-container-lowest rounded-[18px] p-space-md shadow-xl relative overflow-hidden flex flex-col min-h-[380px]">
+          <div class="flex items-center justify-between z-10 pb-space-sm">
+            <div class="flex items-center gap-space-sm">
+              <span class="w-2 h-2 rounded-full bg-tertiary" id="camDot"></span>
+              <span class="font-mono text-badge-mono text-on-surface uppercase" id="camLabel">Camera off</span>
+            </div>
+            <div class="flex items-center gap-space-sm">
+              <span class="status" id="signStatus" data-state="idle" role="status"><span class="dot" aria-hidden="true"></span><span class="status-text">Off</span></span>
+              <button class="px-space-md py-space-xs rounded-full bg-surface-container-high text-on-surface text-body-sm font-semibold hover:bg-surface-container-highest transition-colors" id="camBtn">Enable camera</button>
+            </div>
+          </div>
+          <div class="relative w-full flex-1 rounded-xl overflow-hidden bg-surface-container-low flex items-center justify-center min-h-[260px]">
+            <video id="camVideo" class="absolute inset-0 w-full h-full object-cover" playsinline muted aria-label="Camera preview for sign recognition"></video>
+            <canvas id="camCanvas" class="absolute inset-0 w-full h-full pointer-events-none"></canvas>
+            <div class="relative text-center text-on-surface-variant p-space-lg" id="camEmpty">
+              <svg class="doodle mx-auto h-28 w-auto" viewBox="0 0 160 110" role="img" aria-label="Doodle: a hand with tracked landmark points">
+                <path d="M74 96 c-14 -6 -22 -20 -23 -36 l-1 -22 c0 -5 3 -8 7 -8 c4 0 7 3 7 7 l1 15 m0 -17 l-1 -20 c0 -5 3 -8 7 -8 c5 0 8 3 8 8 l1 20 m0 -2 l0 -22 c0 -5 3 -8 8 -8 c5 0 8 3 8 8 l0 23 m0 -1 l1 -16 c0 -5 3 -8 7 -8 c4 0 7 3 7 8 l-1 19 c-1 25 -9 38 -24 42 c-6 2 -12 2 -17 0 z"/>
+                <circle class="fteal" cx="57" cy="38" r="3"/><circle class="fteal" cx="72" cy="22" r="3"/>
+                <circle class="fteal" cx="88" cy="18" r="3"/><circle class="fteal" cx="103" cy="26" r="3"/>
+                <circle class="famber" cx="80" cy="60" r="3.4"/>
+                <path class="teal thin dash" d="M57 38 L80 60 M72 22 L80 60 M88 18 L80 60 M103 26 L80 60"/>
+                <path class="amber thin dash" d="M120 46 q10 2 14 10 m-16 -24 q12 -2 18 6"/>
+              </svg>
+              <p class="text-body-md mt-2">Camera is off. Tracking runs fully on-device —<br><span class="font-mono text-label-code-sm">no video ever leaves this browser.</span></p>
+            </div>
+          </div>
+          <!-- detection pill -->
+          <div class="z-10 bg-surface-container p-space-sm rounded-xl flex items-center justify-between mt-space-sm gap-space-md">
+            <div class="flex items-center gap-space-sm min-w-0">
+              <span class="material-symbols-outlined text-tertiary">sign_language</span>
+              <div class="min-w-0">
+                <span class="text-title text-on-surface font-semibold font-mono" id="detectName">—</span>
+                <span class="block font-mono text-label-code-sm text-on-surface-variant truncate" id="detectPhrase">Show a hand to the camera</span>
+              </div>
+            </div>
+            <div class="text-right flex-none w-28">
+              <span class="text-headline-sm text-tertiary font-bold" id="confPct">0%</span>
+              <span class="block font-mono text-label-code-sm text-on-surface-variant">Match</span>
+              <div class="meter mt-1"><div id="confBar"></div></div>
+              <div class="meter hold mt-1"><div id="holdBar"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- sentence chain -->
+        <div class="bg-surface-container rounded-[18px] p-space-md shadow-md">
+          <span class="font-mono text-label-code-sm text-on-surface-variant block mb-space-xs uppercase">Recognized sign chain:</span>
+          <div class="flex flex-wrap items-center gap-space-xs mb-space-sm min-h-[30px]" id="signChain">
+            <span class="font-mono text-label-code-sm" style="color:var(--txt-dim)" id="chainEmpty">Hold a sign steady for ~1 second — it lands here.</span>
+          </div>
+          <div class="flex items-center justify-between flex-wrap gap-space-sm">
+            <span class="text-body-sm text-on-surface min-w-0 break-words" id="signSentence"></span>
+            <div class="flex items-center gap-space-sm flex-none">
+              <button class="px-space-sm py-space-xs rounded-full bg-surface-container-high text-on-surface-variant hover:text-on-surface text-body-sm transition-colors" id="signClearBtn" title="Remove last sign">⌫ Undo</button>
+              <button class="px-space-sm py-space-xs rounded-full bg-surface-container-high text-on-surface-variant hover:text-on-surface text-body-sm transition-colors" id="signClearAllBtn">Clear</button>
+              <button class="inline-flex items-center gap-1 px-space-md py-space-xs rounded-full bg-primary-container text-on-primary-container font-semibold text-body-md hover:brightness-110 transition-all" id="signSpeakBtn">
+                <span class="material-symbols-outlined text-sm">volume_up</span>Speak chain
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: vocabulary -->
+      <div class="lg:col-span-5 flex flex-col gap-space-sm">
+        <div class="flex items-center justify-between mb-space-xs">
+          <span class="text-title text-on-surface font-semibold">Recognized vocab grid</span>
+          <span class="font-mono text-label-code-sm text-secondary">16 SIGNS</span>
+        </div>
+        <div class="grid grid-cols-2 gap-space-sm" id="signVocab"></div>
+        <div class="bg-surface-container-low rounded-xl p-space-md mt-space-xs">
+          <span class="font-mono text-badge-mono text-tertiary uppercase block mb-1">Camera privacy</span>
+          <p class="text-body-sm text-on-surface-variant">Vision runs fully in your browser (MediaPipe WebAssembly). The camera stream never touches any server.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 05 / FAQ ================= -->
+  <section class="relative w-full px-gutter py-space-xl max-w-4xl mx-auto scroll-mt-28" id="faq">
+    <div class="mb-space-xl text-center">
+      <span class="font-mono text-label-code-sm text-secondary uppercase tracking-widest">05 / FAQ</span>
+      <h2 class="text-headline-lg text-on-surface mt-space-xs font-extrabold">Honest answers.</h2>
+    </div>
+    <div class="flex flex-col gap-space-sm">
+      <details class="faq">
+        <summary>Does this understand real sign language (ISL)?</summary>
+        <div class="ans">No — it recognises 16 hand signs mapped to common phrases. ISL is a complete language with grammar; that's why the UI says "limited vocabulary".</div>
+      </details>
+      <details class="faq">
+        <summary>Is my audio or camera feed stored or uploaded?</summary>
+        <div class="ans">Speech goes to Gnani's API over TLS for transcription only; silence never leaves the laptop, and nothing is stored by this app. Camera frames are processed fully on-device.</div>
+      </details>
+      <details class="faq">
+        <summary>Can it replace a certified interpreter?</summary>
+        <div class="ans">No. Samvaad is for everyday moments — counters, shops, offices. For medical consent or legal settings, insist on a qualified human interpreter.</div>
+      </details>
+      <details class="faq">
+        <summary>What if the voice (TTS) fails?</summary>
+        <div class="ans">Every reply is shown as text <em>before</em> the voice request is sent. Timbre is beta; the conversation never depends on the speaker working.</div>
+      </details>
+      <details class="faq">
+        <summary>Does it work in a noisy room?</summary>
+        <div class="ans">Yes — browser noise suppression plus Prisma's training on real-world Indian audio. If the realtime stream drops, Samvaad switches to chunked mode by itself without stopping the mic.</div>
+      </details>
+      <details class="faq">
+        <summary>Which languages are supported?</summary>
+        <div class="ans">Hindi, English (IN), Bangla, Gujarati, Kannada, Malayalam, Marathi, Punjabi, Tamil, Telugu — plus auto-detect and Hinglish code-mixing. Default voice Poorvi is Timbre's Hinglish voice.</div>
+      </details>
+    </div>
+  </section>
+</div>
+</main>
+
+<!-- ================= FOOTER ================= -->
+<footer class="w-full bg-surface-container-lowest">
+  <div class="max-w-7xl mx-auto px-gutter py-space-xl flex flex-col md:flex-row items-center justify-between gap-space-md">
+    <div class="flex items-center gap-space-md">
+      <svg class="doodle h-16 w-auto" viewBox="0 0 170 90" role="img" aria-label="Doodle: the two characters connected by a conversation">
+        <path d="M26 44 c-3 -17 9 -29 24 -28 c14 1 23 12 21 27 c-1 13 -11 20 -23 19 c-12 -1 -20 -8 -22 -18 z"/>
+        <path class="teal" style="fill:var(--teal);fill-opacity:.18" d="M21 35 c4 -17 33 -22 47 -7 l3 4 c-17 -7 -34 -6 -50 3 z"/>
+        <path class="teal" d="M21 35 c4 -17 33 -22 47 -7"/>
+        <circle class="ftxt" cx="41" cy="42" r="1.8"/><circle class="ftxt" cx="56" cy="41" r="1.8"/>
+        <path d="M45 52 q5 4 11 1"/>
+        <path d="M122 46 c-3 -17 9 -29 24 -28 c14 1 23 12 21 27 c-1 13 -11 20 -23 19 c-12 -1 -20 -8 -22 -18 z"/>
+        <path class="amber" style="fill:var(--amber-soft);fill-opacity:.2" d="M117 44 c-5 -22 15 -33 31 -29 c14 3 21 15 18 29 c-2 -10 -7 -16 -13 -19 c1 6 0 10 -3 14 c-3 -6 -8 -10 -14 -11 c-8 -2 -15 5 -19 16 z"/>
+        <path class="amber" d="M117 44 c-5 -22 15 -33 31 -29 c14 3 21 15 18 29"/>
+        <circle class="ftxt" cx="137" cy="44" r="1.8"/><circle class="ftxt" cx="152" cy="43" r="1.8"/>
+        <path d="M141 54 q5 4 11 1"/>
+        <path class="thin dash teal" d="M76 34 q20 -14 42 2"/>
+        <path class="thin dash amber" d="M118 62 q-22 14 -42 -2"/>
+        <path class="famber" d="M80 64 l-10 -5 l11 -6 z"/>
+        <path class="fteal" d="M114 30 l10 5 -11 6 z"/>
+      </svg>
+      <div class="flex flex-col">
+        <span class="text-title text-on-surface font-bold">Samvaad</span>
+        <span class="font-mono text-label-code-sm text-on-surface-variant">Two ways. One conversation.</span>
+      </div>
+    </div>
+    <span class="font-mono text-label-code-sm text-on-surface-variant text-center">Built with <span class="text-on-surface font-semibold">Gnani Prisma</span> (STT) + <span class="text-on-surface font-semibold">Gnani Timbre</span> (TTS)<br>Great Indian AI Internship Challenge</span>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="alert"></div>
+<audio id="ttsAudio" hidden></audio>
+<script type="module" src="app.js"></script>
+</body>
+</html>
