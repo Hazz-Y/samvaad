@@ -256,6 +256,7 @@ async function flushRestChunk() {
   fd.append("audio_file", new Blob([wav], { type: "audio/wav" }), "chunk.wav");
   fd.append("language_code", $("langSel").value);
   fd.append("format", "codemix");
+  fd.append("model", "prisma-v3.0");
   bumpReqs();
   try {
     const r = await fetch("/api/stt", { method: "POST", body: fd });
