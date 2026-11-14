@@ -7,10 +7,10 @@
 ### *Two people. No interpreter in the room. Finally understanding each other.*
 
 **🌐 Live demo: [samvaad-bridge.netlify.app](https://samvaad-bridge.netlify.app)**  
-📄 **Project Summary: [One-Pager (PDF)](docs/samvaad-onepager.pdf)**
+📄 **Project Summary: [One-Pager (PDF)](samvaad-onepager.pdf)**
 
 [![Live on Netlify](https://img.shields.io/badge/live-samvaad--bridge.netlify.app-00C7B7?logo=netlify&logoColor=white)](https://samvaad-bridge.netlify.app)
-[![One Pager](https://img.shields.io/badge/summary-One--Pager%20PDF-E02424?logo=adobeacrobatreader&logoColor=white)](docs/samvaad-onepager.pdf)
+[![One Pager](https://img.shields.io/badge/summary-One--Pager%20PDF-E02424?logo=adobeacrobatreader&logoColor=white)](samvaad-onepager.pdf)
 [![Powered by Gnani](https://img.shields.io/badge/powered%20by-Gnani%20Prisma%20%2B%20Timbre-FFA94D)](https://docs.gnani.ai)
 [![Repo](https://img.shields.io/badge/github-Hazz--Y%2Fsamvaad-171c24?logo=github)](https://github.com/Hazz-Y/samvaad)
 
